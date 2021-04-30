@@ -1,0 +1,468 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Scanner;
+
+public class Elivator
+{
+    private static String LOCK1="LOCK1";
+    private static String LOCK2="LOCK2";
+    static int statefloor1=1;
+    static int statefloor2=1;
+    static List<Passenger> requestque1=new ArrayList<Passenger>();
+    static List<Passenger> requestque2=new ArrayList<Passenger>();
+    static List<Passenger> requestque3=new ArrayList<Passenger>();
+    static List<Passenger> requestque4=new ArrayList<Passenger>();
+//dianti
+    static class NewElevator1 extends Thread
+    {
+    	int censhu;
+    	int inifloor;
+    	int statefloor;
+    	int number;
+    	List<Passenger> requestque=new ArrayList<Passenger>();
+    	NewElevator1()
+    	{
+    		inifloor=1;
+    		statefloor=1;
+    		censhu=20;
+    		number=1;
+    		requestque=null;
+    	}
+    	NewElevator1(int censhu,int inifloor,int number)
+    	{
+    		this.censhu=censhu;
+    		this.inifloor=inifloor;
+    		this.number=number;
+    		statefloor=inifloor;
+    	}
+    	public int Getfloor()
+    	{
+    		return statefloor;
+    	}
+    	
+    	@Override
+    	public void run()
+    	{
+    		synchronized(LOCK1)
+    	   {
+    		if(number==1)
+    		{
+    		while(true)
+    		{
+    			requestque=requestque1;
+    			if(requestque==null||requestque.isEmpty()==true)
+    			{
+    				System.out.println(number+"号电梯当前在"+statefloor+"层");
+    				try {
+    				LOCK1.wait();
+    				}
+    				catch(Exception e)
+    				{
+    					e.printStackTrace();
+    				}
+    			}
+    			else
+    			{
+    				System.out.println(number+"号电梯当前在"+statefloor+"层");
+    				Collections.sort(requestque);
+    				while(requestque.get(0).inifloor>statefloor)
+    				{
+    					statefloor++;
+    					try {
+        					sleep(100);
+        					}
+        					catch(Exception e)
+       						{
+       							e.printStackTrace();
+      						}
+    					System.out.println("1号电梯到达第"+statefloor+"层");
+    				}
+    				statefloor1=statefloor;
+    				LOCK1.notifyAll();
+    				while(requestque.get(0).inifloor<statefloor)
+    				{
+    					statefloor--;
+    					try {
+        					sleep(100);
+        					}
+        					catch(Exception e)
+       						{
+       							e.printStackTrace();
+      						}
+    					System.out.println("1号电梯到达第"+statefloor+"层");
+    				}
+    				statefloor1=statefloor;
+    				LOCK1.notifyAll();
+    				while(requestque.get(0).requestfloor>statefloor)
+    				{
+    					while(requestque.get(0).state==0)
+    					{
+    						LOCK1.notifyAll();
+    						try {
+								LOCK1.wait();
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+    					}
+    					statefloor++;
+    					try {
+        					sleep(100);
+        					}
+        					catch(Exception e)
+       						{
+       							e.printStackTrace();
+      						}
+    					System.out.println("1号电梯到达第"+statefloor+"层");
+    				
+    				}
+    				statefloor1=statefloor;
+    				LOCK1.notifyAll();
+    				while(requestque.get(0).requestfloor<statefloor)
+        			{
+    					while(requestque.get(0).state==0)
+    					{
+    						
+    					}
+       					statefloor--;
+       					try {
+           					sleep(100);
+           					}
+           					catch(Exception e)
+        					{
+           						e.printStackTrace();
+          					}
+        					System.out.println("1号电梯到达第"+statefloor+"层");
+        				
+        			}
+        			statefloor1=statefloor;
+        			LOCK1.notifyAll();
+        			while(requestque.get(0).state==1)
+        			{
+        				try {
+							LOCK1.wait();
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+        			}
+    			}
+    			if(requestque.isEmpty()==false)
+    			{
+    				requestque.remove(0);
+    			}
+    		  }}
+    		if(number==2)
+    		{
+        		
+            		while(true)
+            		{
+            			requestque=requestque2;
+            			if(requestque==null||requestque.isEmpty()==true)
+            			{
+            				System.out.println(number+"号电梯当前在"+statefloor+"层");
+            				try {
+            				LOCK1.wait();
+            				}
+            				catch(Exception e)
+            				{
+            					e.printStackTrace();
+            				}
+            			}
+            			else
+            			{
+            				System.out.println(number+"号电梯当前在"+statefloor+"层");
+            				Collections.sort(requestque);
+            				while(requestque.get(0).inifloor>statefloor)
+            				{
+            					statefloor++;
+            					try {
+                					sleep(100);
+                					}
+                					catch(Exception e)
+               						{
+               							e.printStackTrace();
+              						}
+            					System.out.println("2号电梯到达第"+statefloor+"层");
+            				}
+            				statefloor2=statefloor;
+            				LOCK1.notifyAll();
+            				while(requestque.get(0).inifloor<statefloor)
+            				{
+            					statefloor--;
+            					try {
+                					sleep(100);
+                					}
+                					catch(Exception e)
+               						{
+               							e.printStackTrace();
+              						}
+            					System.out.println("2号电梯到达第"+statefloor+"层");
+            				}
+            				statefloor2=statefloor;
+            				LOCK1.notifyAll();
+            				while(requestque.get(0).requestfloor>statefloor)
+            				{
+            					while(requestque.get(0).state==0)
+            					{
+            						LOCK1.notifyAll();
+            						try {
+        								LOCK1.wait();
+        							} catch (InterruptedException e) {
+        								// TODO Auto-generated catch block
+        								e.printStackTrace();
+        							}
+            					}
+            					statefloor++;
+            					try {
+                					sleep(100);
+                					}
+                					catch(Exception e)
+               						{
+               							e.printStackTrace();
+              						}
+            					System.out.println("2号电梯到达第"+statefloor+"层");
+            				
+            				}
+            				statefloor2=statefloor;
+            				LOCK1.notifyAll();
+            				while(requestque.get(0).requestfloor<statefloor)
+                			{
+            					while(requestque.get(0).state==0)
+            					{
+            						
+            					}
+               					statefloor--;
+               					try {
+                   					sleep(100);
+                   					}
+                   					catch(Exception e)
+                					{
+                   						e.printStackTrace();
+                  					}
+                					System.out.println("2号电梯到达第"+statefloor+"层");
+                				
+                			}
+                			statefloor2=statefloor;
+                			LOCK1.notifyAll();
+                			while(requestque.get(0).state==1)
+                			{
+                				try {
+        							LOCK1.wait();
+        						} catch (InterruptedException e) {
+        							// TODO Auto-generated catch block
+        							e.printStackTrace();
+        						}
+                			}
+            			}
+            			if(requestque.isEmpty()==false)
+            			{
+            				requestque.remove(0);
+            			}
+            		  }
+    		}
+    		}	
+    	   }
+
+    			
+    		}
+    	
+    
+    
+    
+
+    
+//chengke
+    static class Passenger extends Thread implements Comparable<Passenger>
+    {
+    	int inifloor;
+    	int name;
+    	int requestfloor;
+    	int statefloor;
+    	int elenumber;
+    	int state;
+    	Passenger()
+    	{
+    		inifloor=1;
+    		statefloor=1;
+    		state=0;
+    		requestfloor=2;
+    	}
+    	Passenger(int inifloor,int requestfloor,int elenumber,int name)
+    	{
+    		this.inifloor=inifloor;
+    		this.requestfloor=requestfloor;
+    		statefloor=inifloor;
+    		this.elenumber=elenumber;
+    		this.name=name;
+    		state=0;
+    		if(elenumber==1)
+    		{
+    			requestque1.add(this);
+    		}
+    		if(elenumber==2)
+    		{
+    			requestque2.add(this);
+    		}
+    		if(elenumber==3)
+    		{
+    			requestque3.add(this);
+    		}
+    		if(elenumber==4)
+    		{
+    			requestque4.add(this);
+    		}
+    	}
+    	public Passenger Get_passenger()
+    	{
+    		return this;
+    	}
+    	public int compareTo(Passenger passenger)
+    	{
+    		return(this.inifloor-passenger.inifloor);
+    	}
+    	@Override
+    	public void run()
+    	{
+    		synchronized(LOCK2)
+    	{
+    		LOCK2.notifyAll();
+    		if(elenumber==1)
+    		{
+    		while(true)
+    		 {
+    			if(statefloor1==inifloor)
+    			{
+    				state=1;
+    				System.out.println(name+"号乘客已上电梯");
+    				LOCK2.notifyAll();
+    				break;
+    			}
+    			else
+    			{
+    				try 
+    				{
+    					System.out.println(name+"号乘客在等待电梯到来");
+    					sleep(100);
+    				}
+    				catch(Exception e)
+    				{
+    					e.printStackTrace();
+    				}
+    			}
+    		 }
+    		 while(state==1)
+    		 {
+    			 try {
+    			 sleep(100);
+    			 }
+    			 catch(Exception e)
+    			 {
+    				 e.printStackTrace();
+    			 }
+    			     if(statefloor1==requestfloor)
+    				 {
+    			    	 System.out.println(name+"号乘客已下电梯");
+    			    	 state=-1;
+    			    	 LOCK2.notifyAll();
+    			    	 break;
+    			    }
+    		 }
+    		}
+    		if(elenumber==2)
+    		{
+    		while(true)
+    		 {
+    			if(statefloor2==inifloor)
+    			{
+    				state=1;
+    				System.out.println(name+"号乘客已上电梯");
+    				LOCK2.notifyAll();
+    				break;
+    			}
+    			else
+    			{
+    				try 
+    				{
+    					System.out.println(name+"号乘客在等待电梯到来");
+    					sleep(100);
+    				}
+    				catch(Exception e)
+    				{
+    					e.printStackTrace();
+    				}
+    			}
+    		 }
+    		 while(state==1)
+    		 {
+    			 try {
+    			 sleep(100);
+    			 }
+    			 catch(Exception e)
+    			 {
+    				 e.printStackTrace();
+    			 }
+    			 if(statefloor2==requestfloor)
+    			 {
+    				 state=-1;
+    				 System.out.println(name+"号乘客已下电梯");
+    				 LOCK2.notifyAll();
+    				 break;
+    			 }
+    		 }
+    		}
+    		
+    	}
+    }
+    }
+    
+
+	public static void main(String arg[])
+	{
+		Elivator Elivator=new Elivator();
+		System.out.println("输入乘客数");
+		int quat=1;
+		int count=0;
+		Scanner s=new Scanner(System.in);
+		quat=s.nextInt();
+		int pasg_inif=1;int pasg_name=1;
+		int pasg_elen=1;int pasg_req_fl=3;
+		for(int i=0;i<quat;i++)
+		{
+			System.out.println((i+1)+"号乘客初始层");
+			pasg_inif=s.nextInt();
+			System.out.println("乘客编号");
+			pasg_name=s.nextInt();
+			System.out.println("乘客请求层");
+			pasg_req_fl=s.nextInt();
+			System.out.println("所用电梯号");
+			pasg_elen=s.nextInt();
+			count++;
+			if(count==1)
+		 	{
+				Passenger pa1=new Elivator.Passenger(pasg_inif,pasg_req_fl,pasg_elen,pasg_name);
+				pa1.start();
+		 	}
+			if(count==2)
+			{
+				Passenger pa2=new Elivator.Passenger(pasg_inif,pasg_req_fl,pasg_elen,pasg_name);
+				pa2.start();
+			}
+			if(count==3)
+			{
+				Passenger pa3=new Elivator.Passenger(pasg_inif,pasg_req_fl,pasg_elen,pasg_name);
+				pa3.start();
+			}
+		}
+		NewElevator1 ele1=new Elivator.NewElevator1(20,1,1);
+		NewElevator1 ele2=new Elivator.NewElevator1(20,2,2);
+		NewElevator1 ele3=new Elivator.NewElevator1(20,3,3);
+    NewElevator1 ele4=new Elivator.NewElivator1(20,4,4);
+		ele1.start();
+		ele2.start();
+    ele3.start();
+    ele4.start();
+		s.close();
+	}
+}
